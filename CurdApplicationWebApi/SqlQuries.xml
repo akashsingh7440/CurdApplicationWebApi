@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Quries>
+	<AddInformation>
+		<![CDATA[
+	INSERT INTO curd_operation.curdapplication (UserName, Email, Mobile, Gender, Salary) VALUES (@UserName, @Email, @Mobile, @Gender, @Salary);
+	]]>
+	</AddInformation>
+	<GetAllInformation>
+		<![CDATA[
+		SELECT * FROM curd_operation.curdapplication;
+		]]>
+	</GetAllInformation>
+</Quries>
