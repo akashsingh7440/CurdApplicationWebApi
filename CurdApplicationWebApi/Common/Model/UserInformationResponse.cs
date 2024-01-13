@@ -1,14 +1,14 @@
 ﻿namespace CurdApplicationWebApi.Common.Model
 {
-    public class GetAllInformationResponse
+    public class UserInformationResponse
     {
         public bool IsSuccessfull { get; set; }
         public string Message { get; set; }
 
-        public List<AllInformationResponse> Result { get; set; }
+        public List<UserInformation> Result { get; set; }
 
     }
-    public class AllInformationResponse
+    public class UserInformation
     {
         public string UserName { get; set; }
         public int UserId { get; set; }

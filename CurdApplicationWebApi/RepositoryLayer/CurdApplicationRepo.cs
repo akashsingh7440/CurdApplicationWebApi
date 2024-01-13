@@ -1,6 +1,7 @@
 ﻿using CurdApplicationWebApi.Common.Model;
 using CurdApplicationWebApi.Utility;
 using MySqlConnector;
+using System.Reflection.Metadata.Ecma335;
 
 namespace CurdApplicationWebApi.RepositoryLayer
 {
@@ -60,10 +61,10 @@ namespace CurdApplicationWebApi.RepositoryLayer
             return response;
         }
 
-        public async Task<GetAllInformationResponse> GetAllInformation()
+        public async Task<UserInformationResponse> GetAllInformation()
         {
             _logger.LogInformation($"Get All information from Database in Repository Layer...");
-            GetAllInformationResponse response = new GetAllInformationResponse();
+            UserInformationResponse response = new UserInformationResponse();
             response.IsSuccessfull = true;
 
             if( _mySqlConnection.State != System.Data.ConnectionState.Open )
@@ -77,7 +78,7 @@ namespace CurdApplicationWebApi.RepositoryLayer
                 {
                     command.CommandType = System.Data.CommandType.Text;
                     command.CommandTimeout = 180;
-                    response.Result = new List<AllInformationResponse>();
+                    response.Result = new List<UserInformation>();
 
                     using(MySqlDataReader data = await command.ExecuteReaderAsync())
                     {
@@ -86,7 +87,7 @@ namespace CurdApplicationWebApi.RepositoryLayer
                         {
                             while (await data.ReadAsync())
                             {
-                                AllInformationResponse getData = new AllInformationResponse();
+                                UserInformation getData = new UserInformation();
                                 getData.UserId = data["UserId"] != DBNull.Value ? Convert.ToInt16(data["UserId"]) : 0;
                                 getData.UserName = Convert.ToString(data["UserName"]) ?? string.Empty; 
                                 getData.Email = Convert.ToString(data["Email"]) ?? string.Empty;
@@ -120,6 +121,54 @@ namespace CurdApplicationWebApi.RepositoryLayer
                 await _mySqlConnection.CloseAsync();
                 await _mySqlConnection.DisposeAsync();
             }
+        }
+
+        public async Task<UserInformationDetailResponse> GetUserInformation(int userId)
+        {
+            var response = new UserInformationDetailResponse();
+            response.Success = true;
+            try
+            {
+                if(_mySqlConnection.State != System.Data.ConnectionState.Open)
+                {
+                    await _mySqlConnection.OpenAsync();
+                }
+                using(MySqlCommand command = new MySqlCommand(SqlQuries.GetUserInformationById, _mySqlConnection))
+                {
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandTimeout = 180;
+                    command.Parameters.AddWithValue("userId", userId);
+
+                    MySqlDataReader reader = await command.ExecuteReaderAsync();
+                    UserInformation userData = new UserInformation();
+
+                    if (reader.HasRows)
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            userData.UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : 0;
+                            userData.UserName = Convert.ToString(reader["UserName"]) ?? string.Empty;
+                            userData.Email = Convert.ToString(reader["Email"]) ?? string.Empty;
+                            userData.Gender = Convert.ToString(reader["Gender"]) ?? string.Empty;
+                            userData.Salary = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["Salary"]) : 0;
+                            userData.Mobile = reader["UserId"] != DBNull.Value ? Convert.ToInt64(reader["Mobile"]) : 0;
+                            userData.IsActive = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["IsActive"]) : 0;
+                        }
+                    }
+                    response.Result = userData;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false; 
+                response.Message = ex.Message;
+            }
+            finally
+            {
+                await _mySqlConnection.CloseAsync();
+                await _mySqlConnection.DisposeAsync();
+            }
+            return response;
         }
     }
 }

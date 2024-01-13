@@ -44,7 +44,7 @@ namespace CurdApplicationWebApi.Controller
         public async Task<IActionResult> GetAllInformation() 
         {
             _logger.LogInformation($"All Information Details in controller.....");
-            var response = new GetAllInformationResponse();
+            var response = new UserInformationResponse();
             try
             {
                 response  = await _curdApplicationService.GetAllInformation();
@@ -59,6 +59,27 @@ namespace CurdApplicationWebApi.Controller
                 response.Message = ex.Message;
                 _logger.LogError($"Exception in controller : {response.Message}");
                 return NotFound(new { Success = response.IsSuccessfull , Message = response.Message});
+            }
+            return Ok(response.Result);
+        }
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetInformationById(int userId)
+        {
+            var response = new UserInformationDetailResponse();
+            try
+            {
+                response = await _curdApplicationService.GetUserInformation(userId);
+                if(response.Success == false)
+                {
+                    return NotFound(new {IsSuccessfull = response.Success, Message = response.Message});
+                }
+            }
+            catch(Exception ex) 
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                _logger.LogError($"Exception in GetInformationById Controller : {response.Message}");
+
             }
             return Ok(response.Result);
         }

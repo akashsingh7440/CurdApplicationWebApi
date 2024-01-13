@@ -10,4 +10,9 @@
 		SELECT * FROM curd_operation.curdapplication;
 		]]>
 	</GetAllInformation>
+	<GetUserInformationById>
+		<![CDATA[
+		SELECT * FROM curd_operation.curdapplication WHERE UserId = @UserId;
+		]]>
+	</GetUserInformationById>
 </Quries>
