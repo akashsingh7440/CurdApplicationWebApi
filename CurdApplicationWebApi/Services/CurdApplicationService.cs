@@ -17,9 +17,15 @@ namespace CurdApplicationWebApi.Services
             return response;
         }
 
-        public async Task<GetAllInformationResponse> GetAllInformation()
+        public async Task<UserInformationResponse> GetAllInformation()
         {
             var response = await _curdApplication.GetAllInformation();
+            return response;
+        }
+
+        public Task<UserInformationDetailResponse> GetUserInformation(int username)
+        {
+            var response = _curdApplication.GetUserInformation(username);
             return response;
         }
     }
