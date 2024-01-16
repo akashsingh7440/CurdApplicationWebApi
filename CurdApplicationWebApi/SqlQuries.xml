@@ -2,17 +2,45 @@
 <Quries>
 	<AddInformation>
 		<![CDATA[
-	INSERT INTO curd_operation.curdapplication (UserName, Email, Mobile, Gender, Salary) VALUES (@UserName, @Email, @Mobile, @Gender, @Salary);
+	INSERT INTO curd_operation.curdapplication (UserName, Email, Mobile, Gender, Salary) 
+	VALUES (@UserName, @Email, @Mobile, @Gender, @Salary);
 	]]>
 	</AddInformation>
 	<GetAllInformation>
 		<![CDATA[
-		SELECT * FROM curd_operation.curdapplication;
+		SELECT * FROM curd_operation.curdapplication
+		WHERE IsActive = @IsActive;
 		]]>
 	</GetAllInformation>
 	<GetUserInformationById>
 		<![CDATA[
-		SELECT * FROM curd_operation.curdapplication WHERE UserId = @UserId;
+		SELECT * 
+		FROM curd_operation.curdapplication 
+		WHERE UserId = @UserId AND IsActive = @IsActive;
 		]]>
 	</GetUserInformationById>
+	<UpdateUserInformationById>
+		<![CDATA[
+		UPDATE curd_operation.curdapplication
+		SET UserName = @UserName, 
+			Email = @Email, 
+			Mobile = @Mobile, 
+			Gender = @Gender, 
+			Salary = @Salary
+		WHERE UserId = @UserId;
+		]]>
+	</UpdateUserInformationById>
+	<DeleteUserInformationById>
+		<![CDATA[
+		UPDATE curd_operation.curdapplication
+		SET IsActive = 0
+		WHERE UserId = @UserId;
+		]]>
+	</DeleteUserInformationById>
+	<GetAllDeleteUserInformation>
+		<![CDATA[
+		SELECT * FROM curd_operation.curdapplication
+		WHERE IsActive = @IsActive;
+		]]>
+	</GetAllDeleteUserInformation>
 </Quries>
