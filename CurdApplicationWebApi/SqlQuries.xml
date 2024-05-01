@@ -43,4 +43,11 @@
 		WHERE IsActive = @IsActive;
 		]]>
 	</GetAllDeleteUserInformation>
+	<DeleteAllDeactivatedInformation>
+		<![CDATA[
+		DELETE FROM curd_operation.curdapplication
+		WHERE IsActive = @IsActive
+		
+		]]>
+	</DeleteAllDeactivatedInformation>
 </Quries>

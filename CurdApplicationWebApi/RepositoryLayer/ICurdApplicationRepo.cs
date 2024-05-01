@@ -10,6 +10,7 @@ namespace CurdApplicationWebApi.RepositoryLayer
         public Task<UpdateInformationResponse> UpdateUserInformation(UpdateInformationRequest request);
         public Task<DeleteInformationByIdResponse> DeleteUserInformationById(int id);
         public Task<UserInformationResponse> GetAllDeleteUserInformation();
+        public Task<DeleteAllDeactivatedInformation> DeleteAllDeactivatedInformation();
 
     }
 }

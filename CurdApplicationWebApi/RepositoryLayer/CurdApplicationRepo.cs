@@ -294,6 +294,46 @@ namespace CurdApplicationWebApi.RepositoryLayer
             }
             return response;
         }
+
+        public async Task<DeleteAllDeactivatedInformation> DeleteAllDeactivatedInformation()
+        {
+            var response = new DeleteAllDeactivatedInformation();
+            response.IsSuccessfull = true;
+            try
+            {
+                if(_mySqlConnection.State != System.Data.ConnectionState.Open)
+                {
+                    await _mySqlConnection.OpenAsync();
+                }
+                using(MySqlCommand command = new MySqlCommand(SqlQuries.DeleteAllDeactivatedInformation, _mySqlConnection))
+                {
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandTimeout = 180;
+                    command.Parameters.AddWithValue("IsActive", 0);
+
+                    var databaseResponse = await command.ExecuteNonQueryAsync();
+                    if(databaseResponse <= 0)
+                    {
+                        response.Message = "No Deactivated Record Found";
+                        response.DeletedItemCount = databaseResponse;
+                        return response;
+                    }
+                    response.DeletedItemCount = databaseResponse;
+                    response.Message = "Deleted Deactivated Records";
+                }
+            }
+            catch(Exception ex)
+            {
+                response.IsSuccessfull = false;
+                response.Message = ex.Message;
+
+            }
+            finally
+            {
+                await CloseAndDispposeDatabaseConnection();
+            }
+            return response;
+        }
     }
     
 }
