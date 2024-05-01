@@ -146,6 +146,26 @@ namespace CurdApplicationWebApi.Controller
             }
             return Ok(response.Result);
         }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllDeactivatedInformation()
+        {
+            var response = new DeleteAllDeactivatedInformation();
+            try
+            {
+                response = await _curdApplicationService.DeleteAllDeactivatedInformation();
+                if (response.IsSuccessfull == false)
+                {
+                    return BadRequest(new { IsSuccessfull = response.IsSuccessfull, Message = response.Message });
+                }
+
+            }
+            catch(Exception ex)
+            {
+                response.IsSuccessfull = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
+        }
 
     }
 }

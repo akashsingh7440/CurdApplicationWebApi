@@ -1,3 +1,4 @@
+using CurdApplicationWebApi.Middleware;
 using CurdApplicationWebApi.RepositoryLayer;
 using CurdApplicationWebApi.Services;
 
@@ -17,11 +18,9 @@ builder.Services.AddScoped<ICurdApplicationRepo, CurdApplicationRepo>();
 //builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
 #endregion
 
 var app = builder.Build();
-
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -29,6 +28,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "My Api v1");
 });
 app.UseRouting();
+app.UseApiRootLogging();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();

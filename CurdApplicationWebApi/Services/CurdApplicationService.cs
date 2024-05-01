@@ -17,6 +17,12 @@ namespace CurdApplicationWebApi.Services
             return response;
         }
 
+        public async Task<DeleteAllDeactivatedInformation> DeleteAllDeactivatedInformation()
+        {
+            var response = await _curdApplication.DeleteAllDeactivatedInformation();
+            return response;
+        }
+
         public async Task<DeleteInformationByIdResponse> DeleteUserInformationById(int id)
         {
             var response = await _curdApplication.DeleteUserInformationById(id);
