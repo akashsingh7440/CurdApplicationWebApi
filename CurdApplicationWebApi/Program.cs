@@ -1,6 +1,8 @@
+using CurdApplicationWebApi.Component;
 using CurdApplicationWebApi.Middleware;
 using CurdApplicationWebApi.RepositoryLayer;
 using CurdApplicationWebApi.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 #region Dependency Injection
 
 builder.Services.AddScoped<ICurdApplicationService, CurdApplicationService>();
-builder.Services.AddScoped<ICurdApplicationRepo, CurdApplicationRepo>();
-
+builder.Services.AddScoped<IDatabaseAdapter, SqlAdapter>();
+builder.Services.AddScoped<ICurdApplicationComponent, CurdApplicationComponent>();
+builder.Services.AddScoped<IRedisCacheAdapter, RedisCacheAdapter>();
+builder.Services.AddScoped<IDatabaseFactory, DatabaseFactory>();
+builder.Services.AddScoped<IDatabaseAdapter, SqlAdapter>();
+builder.Services.AddScoped<IDatabaseAdapter, ElasticSearchAdapter>();
 #endregion
 
 #region Swager

@@ -1,4 +1,5 @@
 ﻿using CurdApplicationWebApi.Common.Model;
+using CurdApplicationWebApi.Component;
 using CurdApplicationWebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,13 @@ namespace CurdApplicationWebApi.Controller
     public class CrudApplicationController : ControllerBase
     {
         private readonly ICurdApplicationService _curdApplicationService;
+        private readonly ICurdApplicationComponent _curdApplicationComponent;
         private readonly ILogger<CrudApplicationController> _logger;
-        public CrudApplicationController(ICurdApplicationService curdApplicationService, ILogger<CrudApplicationController> logger)
+        public CrudApplicationController(ICurdApplicationService curdApplicationService, ICurdApplicationComponent curdApplicationComponent, ILogger<CrudApplicationController> logger)
+
         {
             _curdApplicationService = curdApplicationService;
+            _curdApplicationComponent = curdApplicationComponent;
             _logger = logger;
         }
 
@@ -26,7 +30,7 @@ namespace CurdApplicationWebApi.Controller
             var response = new AddInformationResponse();
             try
             {
-                response = await _curdApplicationService.AddInformation(request);
+                response = await _curdApplicationComponent.AddInformation(request);
                 if (response.IsSuccessfull == false)
                 {
                     return BadRequest(new { IsSuccessfull = response.IsSuccessfull, Message = response.Message });
@@ -49,7 +53,7 @@ namespace CurdApplicationWebApi.Controller
             var response = new UserInformationResponse();
             try
             {
-                response = await _curdApplicationService.GetAllInformation();
+                response = await _curdApplicationComponent.GetAllInformation();
                 if (response.IsSuccessfull == false)
                 {
                     return NotFound(new { IsSuccessfull = response.IsSuccessfull, Message = response.Message });
@@ -71,7 +75,7 @@ namespace CurdApplicationWebApi.Controller
             var response = new UserInformationDetailResponse();
             try
             {
-                response = await _curdApplicationService.GetUserInformation(userId);
+                response = await _curdApplicationComponent.GetUserInformation(userId);
                 if (response.Success == false)
                 {
                     return NotFound(new { IsSuccessfull = response.Success, Message = response.Message });
@@ -82,7 +86,7 @@ namespace CurdApplicationWebApi.Controller
                 response.Success = false;
                 response.Message = ex.Message;
                 _logger.LogError($"Exception in GetInformationById Controller : {response.Message}");
-
+                return StatusCode(500);
             }
             return Ok(response.Result);
         }
@@ -103,6 +107,7 @@ namespace CurdApplicationWebApi.Controller
             {
                 response.IsSuccessfull = false;
                 response.Message = ex.Message;
+                return StatusCode(500);
             }
             return Ok(response.Result);
         }

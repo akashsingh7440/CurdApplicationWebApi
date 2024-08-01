@@ -5,12 +5,12 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace CurdApplicationWebApi.RepositoryLayer
 {
-    public class CurdApplicationRepo : ICurdApplicationRepo
+    public class SqlAdapter : IDatabaseAdapter
     {
         public readonly IConfiguration _configuration;
         public MySqlConnection _mySqlConnection;
-        private readonly ILogger<CurdApplicationRepo> _logger;
-        public CurdApplicationRepo(IConfiguration configuration, ILogger<CurdApplicationRepo> logger)
+        private readonly ILogger<SqlAdapter> _logger;
+        public SqlAdapter(IConfiguration configuration, ILogger<SqlAdapter> logger)
         {
             _configuration = configuration;
             _mySqlConnection = new MySqlConnection(_configuration[key: "ConnectionStrings:MySqlDB"]);

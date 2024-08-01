@@ -2,7 +2,7 @@
 
 namespace CurdApplicationWebApi.RepositoryLayer
 {
-    public interface ICurdApplicationRepo
+    public interface IDatabaseAdapter
     {
         public Task<AddInformationResponse> AddInformation(AddInformationRequest request);
         public Task<UserInformationResponse> GetAllInformation();
